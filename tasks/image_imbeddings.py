@@ -12,8 +12,9 @@ from tqdm import tqdm
 from utils import get_model_and_preprocess, get_device
 
 
-def image_embeddings(image_files: List[Union[str, Path]]) -> Tuple[List[torch.Tensor],
-                                                    List[Image.Image]]:
+def image_embeddings(
+    image_files: List[Union[str, Path]]
+) -> Tuple[List[torch.Tensor], List[Image.Image]]:
     """
     Placeholder
 

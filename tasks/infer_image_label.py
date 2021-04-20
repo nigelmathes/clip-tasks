@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from PIL import Image
 
-from class_embeddings import get_class_embeddings
+from text_embeddings import get_text_embeddings
 from utils import get_device, get_model_and_preprocess
 
 device = get_device()
@@ -21,7 +21,7 @@ image_files = [
     "images/lynx.jpg",
     "images/wolf.jpg",
     "images/sphinx.jpeg",
-    "images/cheetah.jpeg"
+    "images/cheetah.jpeg",
 ]
 
 list_of_classes = [
@@ -31,16 +31,13 @@ list_of_classes = [
     "an airplane",
     "a sphinx",
     "a wolf",
-    "a lynx"
+    "a lynx",
 ]
-prompt_templates = [
-    "an image of {}",
-    "a drawing of {}",
-    "a photo of {}"
-]
+prompt_templates = ["an image of {}", "a drawing of {}", "a photo of {}"]
 
-classifier_weights = get_class_embeddings(classes=list_of_classes,
-                                          templates=prompt_templates)
+classifier_weights = get_text_embeddings(
+    text_inputs=list_of_classes, prompt_templates=prompt_templates
+)
 
 # Process the images
 images = []
@@ -59,7 +56,7 @@ with torch.no_grad():
     image_features /= image_features.norm(dim=-1, keepdim=True)
 
     # logits: torch.Size([num_images, num_classes])
-    logits = 100. * image_features.float() @ classifier_weights.float()
+    logits = 100.0 * image_features.float() @ classifier_weights.float()
 
     # probs: torch.Size([num_images, num_classes])
     probs = logits.softmax(dim=-1)
@@ -79,8 +76,9 @@ plt.figure(figsize=(16, 7))
 for i, image in enumerate(display_images):
     plt.subplot(3, 4, i + 1)
     plt.imshow(image)
-    plt.title(f"{predicted_class[i]}, prob="
-              f"{round(probabilities[i][0].item() * 100, 2)}%")
+    plt.title(
+        f"{predicted_class[i]}, prob=" f"{round(probabilities[i][0].item() * 100, 2)}%"
+    )
     plt.xticks([])
     plt.yticks([])
 
