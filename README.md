@@ -1,4 +1,4 @@
-#CLIP Tasks
+# CLIP Tasks
 A set of tasks CLIP can help perform without training, combining text and imagery.
 
 A mashup of a few CLIP repos and my own code, based on:
