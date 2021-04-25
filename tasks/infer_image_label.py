@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
-import numpy as np
 import torch
-from PIL import Image
 
+from image_embeddings import get_image_embeddings
 from text_embeddings import get_text_embeddings
 from utils import get_device, get_model_and_preprocess
 
@@ -40,21 +39,10 @@ classifier_weights = get_text_embeddings(
 )
 
 # Process the images
-images = []
-display_images = []
-for image_file in image_files:
-    display_image = Image.open(image_file)
-    image = preprocess(display_image.convert("RGB")).to(device)
-    images.append(image)
-    display_images.append(display_image)
+display_images, image_features = get_image_embeddings(image_files=image_files)
 
-image_input = torch.tensor(np.stack(images)).to(device)
-
-# predict
+# Perform inference, matching classes to images
 with torch.no_grad():
-    image_features = model.encode_image(image_input)
-    image_features /= image_features.norm(dim=-1, keepdim=True)
-
     # logits: torch.Size([num_images, num_classes])
     logits = 100.0 * image_features.float() @ classifier_weights.float()
 

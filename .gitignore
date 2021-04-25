@@ -3,3 +3,5 @@
 venv
 images
 outputs
+__pycache__/
+tasks/__pycache__/
