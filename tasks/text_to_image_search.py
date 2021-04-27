@@ -1,5 +1,5 @@
 # Search a set of images based on a text query
-from typing import List
+from typing import List, Tuple
 
 from PIL import Image
 
@@ -15,7 +15,7 @@ def text_to_image_search(
     list_of_images: List[Image.Image],
     image_features: torch.Tensor,
     top_k: int = 1,
-) -> List[Image.Image]:
+) -> Tuple[List[Image.Image], List[int]]:
     """
     Search a set of image features representing images with a text query to find
     the most relevant top_k images
@@ -35,7 +35,10 @@ def text_to_image_search(
 
     best_matching_indices = (-similarities).argsort()
 
-    return [list_of_images[i] for i in best_matching_indices[:top_k]]
+    return (
+        [list_of_images[i] for i in best_matching_indices[:top_k]],
+        best_matching_indices[:top_k].tolist(),
+    )
 
 
 if __name__ == "__main__":
@@ -55,12 +58,14 @@ if __name__ == "__main__":
     ]
 
     # Process the images
-    display_images, image_embeddings = get_image_embeddings(image_files=images_to_search)
+    display_images, image_embeddings = get_image_embeddings(
+        image_files=images_to_search
+    )
 
     # Query the images
     query = "an upside-down house"
 
-    matching_images = text_to_image_search(
+    matching_images, _ = text_to_image_search(
         search_query=query,
         list_of_images=display_images,
         image_features=image_embeddings,
