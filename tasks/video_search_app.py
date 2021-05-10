@@ -78,7 +78,7 @@ def text_to_image_search_cached(
     list_of_images: List[Image.Image],
     image_features: torch.Tensor,
     top_k: int = 1,
-) -> Tuple[List[Image.Image], List[int]]:
+) -> Tuple[List[Image.Image], List[int], List[float]]:
     """ Cached version of text_to_image_search() """
     return text_to_image_search(
         search_query=search_query,
@@ -93,6 +93,9 @@ sample_frequency = st.sidebar.selectbox(
     label="Sample every how many seconds?",
     options=[2, 1, 0.5],
     help="Smaller numbers will increase runtime",
+)
+number_matches_to_show = st.sidebar.slider(
+    label="How many matches to show", min_value=1, max_value=10, value=3
 )
 
 default_video = "https://youtu.be/-ssXJtzFOjA"
@@ -117,14 +120,15 @@ if video_to_download:
     )
 
     if text_query:
-        matching_images, matching_indices = text_to_image_search_cached(
+        matching_images, matching_indices, probabilities = text_to_image_search_cached(
             search_query=text_query,
             list_of_images=images_from_video,
             image_features=image_embeddings,
-            top_k=3,
+            top_k=number_matches_to_show,
         )
-        print(matching_indices)
 
-        for image, index in zip(matching_images, matching_indices):
-            st.write(f"{timestamp_link}{index * sample_frequency}s")
+        for image, index, _ in zip(matching_images, matching_indices):
+            st.write(
+                f"Video time for this match: {timestamp_link}{index * sample_frequency}s"
+            )
             st.image(image)
