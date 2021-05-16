@@ -50,18 +50,18 @@ def text_to_image_search(
 
 if __name__ == "__main__":
     images_to_search = [
-        "images/cat1.jpeg",
-        "images/cat2.jpeg",
-        "images/cat3.jpeg",
-        "images/cat4.png",
-        "images/dog1.jpg",
-        "images/dog2.jpeg",
-        "images/dog3.jpeg",
-        "images/house.jpg",
-        "images/lynx.jpg",
-        "images/wolf.jpg",
-        "images/sphinx.jpeg",
-        "images/cheetah.jpeg",
+        "../images/cat1.jpeg",
+        "../images/cat2.jpeg",
+        "../images/cat3.jpeg",
+        "../images/cat4.png",
+        "../images/dog1.jpg",
+        "../images/dog2.jpeg",
+        "../images/dog3.jpeg",
+        "../images/house.jpg",
+        "../images/lynx.jpg",
+        "../images/wolf.jpg",
+        "../images/sphinx.jpeg",
+        "../images/cheetah.jpeg",
     ]
 
     # Process the images
