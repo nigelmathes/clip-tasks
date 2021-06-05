@@ -21,19 +21,19 @@ st.set_page_config(
 
 
 @st.cache
-def download_video_and_compute_embeddings(
+def download_video_cached(
     video_url: str, frame_frequency: int = 1
-) -> Tuple[List[Image.Image], torch.Tensor]:
+) -> List[Image.Image]:
     """
     Download video from Youtube and return frames from it sampled every frame_frequency
-    seconds along with those frames embedded with CLIP
+    seconds
 
     Args:
         video_url: URL link to a Youtube video
         frame_frequency: How often to sample fromes from the video, as a rate in seconds
 
     Returns:
-        List of displayable images and a Tensor of their embedded weights
+        List[Image.Image]: List of displayable images from the video
     """
     with TemporaryDirectory() as download_directory:
         # Download the video as 'video.mp4' in the temporary directory
@@ -70,7 +70,15 @@ def download_video_and_compute_embeddings(
 
         video.release()
 
-        return images, compute_image_embeddings(images=images)
+    return images
+
+
+@st.cache(hash_funcs={torch.Tensor: id})
+def compute_image_embeddings_cached(
+    images: List[Image.Image]
+) -> torch.Tensor:
+    """ Cached version of compute_image_embeddings() """
+    return compute_image_embeddings(images=images)
 
 
 @st.cache
@@ -147,9 +155,10 @@ if video_to_download:
     st.video(video_to_download)
 
     # Process video frames and create CLIP embeddings
-    images_from_video, image_embeddings = download_video_and_compute_embeddings(
+    images_from_video = download_video_cached(
         video_url=video_to_download, frame_frequency=sample_frequency
     )
+    image_embeddings = compute_image_embeddings_cached(images_from_video)
 
     # Prompt user for what to search for (text vs. image)
     if search_type == "Text":
