@@ -81,7 +81,7 @@ def compute_image_embeddings_cached(
     return compute_image_embeddings(images=images)
 
 
-@st.cache
+@st.cache(hash_funcs={torch.Tensor: id})
 def text_to_image_search_cached(
     search_query: str,
     list_of_images: List[Image.Image],
@@ -97,7 +97,7 @@ def text_to_image_search_cached(
     )
 
 
-@st.cache
+@st.cache(hash_funcs={torch.Tensor: id})
 def image_to_image_search_cached(
     search_query: Image.Image,
     list_of_images: List[Image.Image],
