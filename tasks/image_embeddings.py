@@ -29,7 +29,7 @@ def compute_image_embeddings(images: List[Image.Image]) -> torch.Tensor:
     preprocessed_images = []
     for image in tqdm(images):
         # Apply CLIP preprocessing pipeline
-        preprocessed_image = preprocess(image.convert("RGB"))
+        preprocessed_image = preprocess(image)
         preprocessed_images.append(preprocessed_image)
 
     image_input = torch.tensor(np.stack(preprocessed_images)).to(device)

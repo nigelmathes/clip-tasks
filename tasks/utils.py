@@ -21,7 +21,7 @@ def get_device() -> str:
 
 
 def get_model_and_preprocess(
-    model_name: str = "ViT-B/32",
+    model_name: str = "ViT-B/16",
 ) -> Tuple[torch.nn.Module, Callable[[PIL.Image.Image], torch.Tensor]]:
     """
     Use clip.load() with an input model string to load the model and preprocessing
@@ -29,14 +29,14 @@ def get_model_and_preprocess(
 
     Args:
         model_name: Name of the CLIP model, one of:
-                    ["RN50", "RN101", "RN50x4", "ViT-B/32"]
+                    ["RN50", "RN101", "RN50x4", "RN50x16", "ViT-B/32", "ViT-B/16"]
 
     Returns:
         The loaded model and preprocessing pipeline
     """
-    if model_name not in ["RN50", "RN101", "RN50x4", "ViT-B/32"]:
+    if model_name not in ["RN50", "RN101", "RN50x4", "RN50x16", "ViT-B/32", "ViT-B/16"]:
         raise RuntimeError(
-            'Model not available. Choose one of: ["RN50", "RN101", "RN50x4", "ViT-B/32"]'
+            'Model not available. Choose one of: ["RN50", "RN101", "RN50x4", "RN50x16", "ViT-B/32", "ViT-B/16"]'
         )
 
     model, preprocess = clip.load(model_name, device=get_device())
