@@ -15,6 +15,7 @@ def text_to_image_search(
     list_of_images: List[Image.Image],
     image_features: torch.Tensor,
     top_k: int = 1,
+    prompt_templates: List[str] = None,
 ) -> Tuple[List[Image.Image], List[int], List[float]]:
     """
     Search a set of image features representing images with a text query to find
@@ -25,13 +26,17 @@ def text_to_image_search(
         list_of_images: A list of loaded PIL.Images
         image_features: A tensor of CLIP-processed embedded image features
         top_k: The number, k, of matching images to return
+        prompt_templates: List of string prompt templates of this form:
+                          ["an image of {}", "a drawing of {}", "a photo of {}"]
 
     Returns:
         1. A list of PIL.Image images
         2. The indices of the k best matching images
         3. The relative probabilities of the phrase matching
     """
-    embedded_query = get_text_embeddings(text_inputs=[search_query])
+    embedded_query = get_text_embeddings(
+        text_inputs=[search_query], prompt_templates=prompt_templates
+    )
 
     similarity_scores = image_features @ embedded_query
 

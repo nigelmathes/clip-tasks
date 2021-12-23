@@ -79,8 +79,8 @@ def get_text_embeddings(
         text_embeddings = compute_text_embeddings(
             text_inputs=text_inputs, prompt_templates=prompt_templates
         )
-        #save_embeddings(
+        # save_embeddings(
         #    embeddings=text_embeddings, filename=Path("outputs/text_embeddings.npy")
-        #)
+        # )
 
     return text_embeddings
